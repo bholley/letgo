@@ -1,7 +1,7 @@
 // holdingPage.html script file
 
 // Globals
-var secondsLeft = 5;
+var secondsLeft = 30;
 
 // Updates the counter display
 function updateCounterDisplay() {
