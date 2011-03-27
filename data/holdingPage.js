@@ -24,7 +24,7 @@ function tick() {
 
   // Forward if we've waited long enough
   if (secondsLeft == 0) {
-    var baseURI = decodeURIComponent(getURLParam(window.location.href, "dst"));
+    var baseURI = window.atob(getURLParam(window.location.href, "dst"));
     var fullURI = addURLParam(baseURI, "LetGoWaitComplete", "true");
     window.location.replace(fullURI);
   }
