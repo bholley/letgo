@@ -5,9 +5,18 @@
     <title>LetGo Holding Page</title>
     <script src="util.js"></script>
     <script src="holdingPage.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Terminal+Dosis+Light' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+      body { margin: auto; background-color: #1D1D1D;}
+      #really { margin-top: 10%; color:#FFFFFF; font-size: 80px; font-family: Slackey; }
+      #status { font-size: 12px; color:#FFFFFF; font-family: Terminal Dosis Light; }
+    </style>
   </head>
   <body>
-    Do you want to see this page, or are you just looking for some thought relief?<br>
-    You have <span id="timeLeft"></span> seconds left to decide.
+    <center>
+      <div id="really">Really?</div>
+      <div id="status">You have <span id="timeLeft"></span> seconds before you may say yes. Say no at any time.</div>
+    </center>
   </body>
 </html>
