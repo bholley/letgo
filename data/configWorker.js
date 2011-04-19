@@ -1,9 +1,20 @@
 // Our global array of filtered sites
 var gFilteredSites = [];
 
+// What to do if the filters are updated
+function filtersUpdated() {
+
+  // Let the chrome-side script know the filter list has changed
+  postMessage(gFilteredSites);
+
+  // Update the UI
+  regenerateFilterList();
+}
+
 // Receive messages from the addon
 onMessage = function(message) {
   gFilteredSites = message;
+  regenerateFilterList();
 };
 
 // Register our button handler
@@ -18,7 +29,24 @@ document.getElementById("inputbutton").onclick = function() {
 // Add a filter
 function addFilter(filter) {
   gFilteredSites.push(filter);
-  regenerateFilterList();
+  filtersUpdated();
+}
+
+// Remove a filter
+function removeFilter(filter) {
+
+  // Create a new filter array with all of the non-matching
+  // elements from the old array.
+  var newFilters = new Array();
+  for (f in gFilteredSites)
+    if (gFilteredSites[f] != filter)
+      newFilters.push(gFilteredSites[f]);
+
+  // Set the global array to the new array
+  gFilteredSites = newFilters;
+
+  // Notify updates
+  filtersUpdated();
 }
 
 // Regenerates the filter list
@@ -34,7 +62,9 @@ function regenerateFilterList() {
   // Generate the list
   for (filter in gFilteredSites) {
     var listItem = document.createElement('li');
-    listItem.innerHTML = filter;
+    var filterName = gFilteredSites[filter];
+    listItem.innerHTML = filterName;
+    listItem.onclick = function() {removeFilter(filterName);};
     listElement.appendChild(listItem);
   }
 }
