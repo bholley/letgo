@@ -1,11 +1,11 @@
-// Our global array of filtered sites
-var gFilteredSites = [];
+// Our global array of filtered domains
+var gFilteredDomains = [];
 
 // What to do if the filters are updated
 function filtersUpdated() {
 
   // Let the chrome-side script know the filter list has changed
-  postMessage(gFilteredSites);
+  postMessage(gFilteredDomains);
 
   // Update the UI
   regenerateFilterList();
@@ -13,7 +13,7 @@ function filtersUpdated() {
 
 // Receive messages from the addon
 onMessage = function(message) {
-  gFilteredSites = message;
+  gFilteredDomains = message;
   regenerateFilterList();
 };
 
@@ -28,7 +28,19 @@ document.getElementById("inputbutton").onclick = function() {
 
 // Add a filter
 function addFilter(filter) {
-  gFilteredSites.push(filter);
+
+  // Sanitize the filter. If we've got nothing left, we're done.
+  var saneFilter = sanitizeFilter(filter);
+  if (saneFilter.length == 0)
+    return;
+
+  // Remove the filter, if it exists, from the existing filterset.
+  removeFilter(saneFilter);
+
+  // Add the filter to our set
+  gFilteredDomains.push(saneFilter);
+
+  // Notify of updates
   filtersUpdated();
 }
 
@@ -38,15 +50,33 @@ function removeFilter(filter) {
   // Create a new filter array with all of the non-matching
   // elements from the old array.
   var newFilters = new Array();
-  for (f in gFilteredSites)
-    if (gFilteredSites[f] != filter)
-      newFilters.push(gFilteredSites[f]);
+  for (f in gFilteredDomains)
+    if (gFilteredDomains[f] != filter)
+      newFilters.push(gFilteredDomains[f]);
 
   // Set the global array to the new array
-  gFilteredSites = newFilters;
+  gFilteredDomains = newFilters;
 
   // Notify updates
   filtersUpdated();
+}
+
+function sanitizeFilter(filter) {
+
+  // Remove any preceding protocol
+  filter = filter.replace(/.*\/\//, '');
+
+  // Remove the first slash and everything following
+  filter = filter.replace(/\/.*/, '');
+
+  // Lowercase the domain
+  filter = filter.toLowerCase();
+
+  // Remove everything that isn't a valid domain character
+  filter = filter.replace(/[^a-z0-9\-\.]/g, '');
+
+  // All done!
+  return filter;
 }
 
 // Regenerates the filter list
@@ -60,9 +90,9 @@ function regenerateFilterList() {
     listElement.removeChild(listElement.firstChild);
 
   // Generate the list
-  for (filter in gFilteredSites) {
+  for (filter in gFilteredDomains) {
     var listItem = document.createElement('li');
-    var filterName = gFilteredSites[filter];
+    var filterName = gFilteredDomains[filter];
     listItem.innerHTML = filterName;
     listItem.onclick = function() {removeFilter(filterName);};
     listElement.appendChild(listItem);
