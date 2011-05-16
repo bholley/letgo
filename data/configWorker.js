@@ -107,7 +107,7 @@ function regenerateFilterList() {
     var listItem = document.createElement('li');
     var filterName = gFilteredDomains[filter];
     listItem.innerHTML = filterName;
-    listItem.onclick = function() {removeFilter(filterName);};
+    listItem.onclick = function() {removeFilter(this.innerHTML);};
     listElement.appendChild(listItem);
   }
 }
