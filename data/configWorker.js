@@ -17,14 +17,27 @@ onMessage = function(message) {
   regenerateFilterList();
 };
 
-// Register our button handler
-document.getElementById("inputbutton").onclick = function() {
+// Set up the input field
+var inField = document.getElementById("inputbox");
+inField.onkeydown = function(event) {
+
+  // Only listen for enter
+  if (event.keyCode != 13)
+    return;
 
   // Add the filter from the input box, and then clear it
-  var inputBox = document.getElementById("inputbox");
-  addFilter(inputBox.value);
-  inputBox.value = "";
+  addFilter(inField.value);
+  inField.value = "";
 };
+inField.onblur = function() {
+  inField.value = "Add filtered domains:";
+  inField.style.color = "#808080";
+}
+inField.onblur();
+inField.onfocus = function() {
+  inField.value = "";
+  inField.style.color = "black";
+}
 
 // Add a filter
 function addFilter(filter) {
