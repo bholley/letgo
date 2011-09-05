@@ -5,17 +5,17 @@ var gFilteredDomains = [];
 function filtersUpdated() {
 
   // Let the chrome-side script know the filter list has changed
-  postMessage(gFilteredDomains);
+  self.postMessage(gFilteredDomains);
 
   // Update the UI
   regenerateFilterList();
 }
 
 // Receive messages from the addon
-onMessage = function(message) {
+self.on("message", function(message) {
   gFilteredDomains = message;
   regenerateFilterList();
-};
+});
 
 // Set up the input field
 var inField = document.getElementById("inputbox");
