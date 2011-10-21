@@ -2,7 +2,7 @@
     "name": "letgo", 
     "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
     "author": "", 
-    "version": "0.4",
+    "version": "0.5",
     "fullName": "letgo", 
     "id": "jid0-gyRzh587brYyTOmIHvHH4yBHrfg", 
     "description": "Add a delay before loading certain time-wasting sites."
